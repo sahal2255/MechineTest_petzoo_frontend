@@ -26,7 +26,7 @@ export default function Navbar() {
           <Link to='/' className='text-black hover:text-indigo-200 transition-colors duration-300'>
             Home
           </Link>
-          <Link to='/pets' className='text-black hover:text-indigo-200 transition-colors duration-300'>
+          <Link to='/petslist' className='text-black hover:text-indigo-200 transition-colors duration-300'>
             Pets
           </Link>
           <Link to='/adoption' className='text-black hover:text-indigo-200 transition-colors duration-300'>
@@ -60,7 +60,7 @@ export default function Navbar() {
           <Link to='/' className='block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300'>
             Home
           </Link>
-          <Link to='/pets' className='block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300'>
+          <Link to='/petslist' className='block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300'>
             Pets
           </Link>
           

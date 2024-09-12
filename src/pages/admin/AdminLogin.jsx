@@ -2,8 +2,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import CommonForm from '../../components/common/CommonForm';
 import  {AdminEnter}  from '../../services/admin/AdminEnter';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminLogin() {
+  const navigate=useNavigate()
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: '',
@@ -16,6 +18,7 @@ export default function AdminLogin() {
     try{
       const response=await AdminEnter(data)
       console.log('admin logged in',response)
+      navigate('/admin/dashboard')
     }catch(error){
       console.log('eror',error);
       

@@ -7,6 +7,7 @@ import Profile from '../../components/layouts/userLayout/Profile';
 import UserProtect from '../../components/Protected/userProtected/UserProtect';
 import AdoptionForm from '../../components/layouts/userLayout/AdoptionForm';
 import YourAdopted from '../../components/layouts/userLayout/YourAdopted';
+import PetList from '../../components/layouts/userLayout/PetList';
 
 export default function UserRoute() {
   return (
@@ -16,12 +17,11 @@ export default function UserRoute() {
         <Route path='/login' element={<UserLogin />} />
         <Route path='/signup' element={<UserSign />} />
         <Route path='/' element={<Home />} />
-        {/* <Route path='/profile' element={<Profile />} /> */}
         
         <Route element={<UserProtect />}>
           <Route path='/profile' element={<Profile />} />
-          {/* <Route path='/adoption' element={<AdoptionForm />} /> */}
           <Route path='/adoption' element={<YourAdopted />}/>
+          <Route path='/petslist' element={<PetList />}/>
         </Route>
       </Routes>
     </BrowserRouter>
