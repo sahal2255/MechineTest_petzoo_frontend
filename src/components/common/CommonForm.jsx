@@ -15,14 +15,24 @@ export default function CommonForm({ title, fields, buttonLabel, onSubmit, contr
                 control={control}
                 rules={field.rules}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
-                  <input
-                    type={field.type}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    ref={ref}
-                    className={`w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${field.error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
-                  />
+                  field.type === 'file' ? (
+                    <input
+                      type="file"
+                      onChange={(e) => onChange(e.target.files)}
+                      onBlur={onBlur}
+                      ref={ref}
+                      className={`w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${field.error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
+                    />
+                  ) : (
+                    <input
+                      type={field.type}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      ref={ref}
+                      className={`w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${field.error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
+                    />
+                  )
                 )}
               />
               {field.error && <p className="text-red-500 text-sm mt-1">{field.error}</p>}

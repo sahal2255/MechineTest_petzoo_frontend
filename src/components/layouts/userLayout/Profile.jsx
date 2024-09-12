@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar'; // Import the Navbar component
 import { ProfileGet } from '../../../services/user/Profile';
+import { useNavigate } from 'react-router-dom'; // For navigating after logout
 
 export default function Profile() {
   const [userData, setUserData] = useState({
@@ -9,6 +10,9 @@ export default function Profile() {
     phoneNumber: '',
   });
 
+  const navigate = useNavigate();
+
+  // Fetch user profile details
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -26,6 +30,13 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
+  // Logout handler
+  const handleLogout = () => {
+    // Clear tokens or session (implementation depends on your auth setup)
+    document.cookie = 'token=; Max-Age=0'; // Clearing the token
+    navigate('/login'); // Redirect to login after logout
+  };
+
   console.log('Profile page loaded');
 
   return (
@@ -35,25 +46,54 @@ export default function Profile() {
 
       {/* Profile section, centered and spaced below the navbar */}
       <div className="flex flex-col items-center justify-center min-h-screen pt-20 bg-gray-100">
-        <div className="max-w-lg w-full mx-auto p-10 rounded-2xl shadow-2xl border border-gray-300 bg-white">
+        {/* Profile Card */}
+        <div className="max-w-lg w-full mx-auto p-10 rounded-2xl shadow-2xl border border-gray-300 bg-white mb-10">
           <div className="relative flex flex-col items-center">
             <h2 className="text-xl font-extrabold text-gray-800 mt-6 mb-2">{userData.userName}</h2>
             <p className="text-gray-600 text-xl">{userData.email}</p>
+            <p className="text-gray-600 text-xl">{userData.phoneNumber}</p>
           </div>
 
-          <div className="space-y-8 mt-6">
-            <div className="flex items-center justify-between border-b border-gray-300 pb-4">
-              <p className="text-gray-700 font-semibold text-xl">Username:</p>
-              <p className="font-medium text-gray-900 text-xl">{userData.userName}</p>
+          {/* Logout Button */}
+          <button 
+            onClick={handleLogout} 
+            className="mt-6 bg-red-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+
+        {/* Pet Adoption Section */}
+        <div className="max-w-lg w-full mx-auto p-10 rounded-2xl shadow-2xl border border-gray-300 bg-white mb-10">
+          <h3 className="text-2xl font-extrabold text-gray-800 mb-6">Your Adopted Pets</h3>
+          <div className="space-y-4">
+            {/* Example of Adopted Pets Section */}
+            <div className="flex justify-between items-center border-b pb-4">
+              <p className="text-gray-700 font-semibold">Fluffy</p>
+              <p className="text-gray-600">Adopted on: 2023-05-12</p>
             </div>
-            <div className="flex items-center justify-between border-b border-gray-300 pb-4">
-              <p className="text-gray-700 font-semibold text-xl">Email:</p>
-              <p className="font-medium text-gray-900 text-xl">{userData.email}</p>
+            <div className="flex justify-between items-center border-b pb-4">
+              <p className="text-gray-700 font-semibold">Max</p>
+              <p className="text-gray-600">Adopted on: 2022-11-20</p>
             </div>
-            <div className="flex items-center justify-between border-b border-gray-300 pb-4">
-              <p className="text-gray-700 font-semibold text-xl">Phone Number:</p>
-              <p className="font-medium text-gray-900 text-xl">{userData.phoneNumber}</p>
+            {/* Add more pets dynamically here */}
+          </div>
+        </div>
+
+        {/* Saved Pets Section */}
+        <div className="max-w-lg w-full mx-auto p-10 rounded-2xl shadow-2xl border border-gray-300 bg-white">
+          <h3 className="text-2xl font-extrabold text-gray-800 mb-6">Saved Pets</h3>
+          <div className="space-y-4">
+            {/* Example of Saved Pets Section */}
+            <div className="flex justify-between items-center border-b pb-4">
+              <p className="text-gray-700 font-semibold">Bella</p>
+              <button className="text-blue-500 hover:underline">View Details</button>
             </div>
+            <div className="flex justify-between items-center border-b pb-4">
+              <p className="text-gray-700 font-semibold">Shadow</p>
+              <button className="text-blue-500 hover:underline">View Details</button>
+            </div>
+            {/* Add more saved pets dynamically here */}
           </div>
         </div>
       </div>

@@ -22,18 +22,18 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex space-x-8 text-lg font-semibold">
-          <a href="/" className="text-black hover:text-indigo-200 transition-colors duration-300">
+          
+          <Link to='/' className='text-black hover:text-indigo-200 transition-colors duration-300'>
             Home
-          </a>
-          <a href="#about" className="text-black hover:text-indigo-200 transition-colors duration-300">
-            About
-          </a>
-          <a href="/service" className="text-black hover:text-indigo-200 transition-colors duration-300">
-            Services
-          </a>
-          <a href="#contact" className="text-black hover:text-indigo-200 transition-colors duration-300">
-            Contact
-          </a>
+          </Link>
+          <Link to='/pets' className='text-black hover:text-indigo-200 transition-colors duration-300'>
+            Pets
+          </Link>
+          <Link to='/adoption' className='text-black hover:text-indigo-200 transition-colors duration-300'>
+            Manage Adoption
+          </Link>
+          
+          
           <Link to="/profile" className="text-black hover:text-indigo-200 transition-colors duration-300">
             Profile
           </Link>
@@ -57,18 +57,18 @@ export default function Navbar() {
           <FaTimes onClick={toggleMenu} className="text-gray-800 cursor-pointer" />
         </div>
         <div className="p-4 space-y-4">
-          <a href="/" className="block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300">
+          <Link to='/' className='block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300'>
             Home
-          </a>
-          <a href="#about" className="block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300">
-            About
-          </a>
-          <a href="/service" className="block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300">
-            Services
-          </a>
-          <a href="#contact" className="block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300">
-            Contact
-          </a>
+          </Link>
+          <Link to='/pets' className='block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300'>
+            Pets
+          </Link>
+          
+          
+          <Link to='/adoption' className='block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300'>
+            Manage Adoption
+          </Link>
+          
           {/* Add Profile Link in Mobile Menu */}
           <Link to="/profile" className="block py-2 px-4 text-gray-800 font-medium hover:bg-gray-100 rounded-md transition-colors duration-300">
             Profile
