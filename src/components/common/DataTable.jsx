@@ -17,7 +17,9 @@ const DataTable = ({ columns, data }) => {
           {data.map((row, index) => (
             <TableRow key={index}>
               {columns.map((column) => (
-                <TableCell key={column.field}>{row[column.field]}</TableCell>
+                <TableCell key={column.field}>
+                  {column.renderCell ? column.renderCell(row) : row[column.field]}
+                </TableCell>
               ))}
             </TableRow>
           ))}

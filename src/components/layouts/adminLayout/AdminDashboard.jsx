@@ -1,8 +1,8 @@
 import React from 'react';
 import AdminSidebar from './Sidebar';
 import AdminTopBar from './TopBar';
-
-const AdminDashboard = ({ children }) => {
+import { Outlet } from 'react-router-dom';
+const AdminDashboard = () => {
   return (
     <div className="flex h-screen">
       {/* Main Content */}
@@ -18,7 +18,7 @@ const AdminDashboard = ({ children }) => {
           </div>
 
           <div className="flex-1 p-4">
-            {children}
+            <Outlet />
           </div>
         </div>
       </div>

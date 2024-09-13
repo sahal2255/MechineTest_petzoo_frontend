@@ -1,21 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DataTable from '../../common/DataTable'; // Import the reusable table
+import { UserList } from '../../../services/admin/UserList';
 
 // User Listing Component
 const UserListing = () => {
-  // Define columns and data for the user table
+  const [users,setUsers]=useState([])
+  const [loading,setLoading]=useState(false)
+  const [error,setError]=useState(null)
+
+  useEffect(()=>{
+    const fetchUsers=async()=>{
+      try{
+        const data=await UserList()
+        console.log('data',data);
+        
+        setUsers(data)
+      }catch (err) {
+        setError('Failed to fetch user data');
+        console.log('Error fetching users:', err);
+      } finally {
+        setLoading(false); // Stop loading once data is fetched
+      }
+    }
+    fetchUsers()
+    
+  },[])
   const columns = [
-    { field: 'id', headerName: 'ID' },
-    { field: 'name', headerName: 'Name' },
+    // { field: 'id', headerName: 'ID' },
+    { field: 'userName', headerName: 'Name' },
     { field: 'email', headerName: 'Email' },
-    { field: 'role', headerName: 'Role' },
+    { field: 'phoneNumber', headerName: 'Phone Number' },
   ];
 
-  const users = [
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'Admin' },
-    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', role: 'User' },
-    { id: 3, name: 'Mike Johnson', email: 'mike.johnson@example.com', role: 'User' },
-  ];
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
+  
 
   return (
     <div>
