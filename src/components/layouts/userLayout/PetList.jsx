@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fullPetList, OwnerDetails } from '../../../services/user/Adopt';
+import { fullPetList, OwnerDetails,ConfirmAdoption } from '../../../services/user/Adopt';
 import Navbar from './Navbar';
 import Modal from '../../common/Modal'; // Import Modal component
 
@@ -7,10 +7,10 @@ const PetList = () => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling the modal
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling the pet details modal
   const [selectedPet, setSelectedPet] = useState(null);  // State to hold the selected pet
   const [userDetails, setUserDetails] = useState(null); 
-
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // State for controlling the confirm adoption modal
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -28,24 +28,42 @@ const PetList = () => {
     fetchPets();
   }, []);
 
-  const handleImageClick = async(pet) => {
+  const handleImageClick = async (pet) => {
     setSelectedPet(pet);  
     setIsModalOpen(true); 
-    console.log('selected pet owner id',pet.userId)
-    try{
-      const ownerData=await OwnerDetails(pet.userId)
-      setUserDetails(ownerData)
-    } catch(error){
-      console.log('eror',error);
-      
+    console.log('selected pet owner id', pet.userId);
+    try {
+      const ownerData = await OwnerDetails(pet.userId);
+      setUserDetails(ownerData);
+    } catch (error) {
+      console.log('error', error);
     }
-
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);  
     setSelectedPet(null);  
     setUserDetails(null);
+  };
+
+  const handleConfirmAdoptionClick = () => {
+    setIsConfirmModalOpen(true); // Open confirmation modal
+  };
+
+  const handleConfirmClose = () => {
+    setIsConfirmModalOpen(false); // Close confirmation modal
+  };
+
+  const handleAdoptionSubmit = async () => {
+    if (selectedPet && userDetails) {
+      try {
+        await ConfirmAdoption(selectedPet._id, userDetails._id);
+        console.log('Adoption confirmed for pet:', selectedPet.name);
+        setIsConfirmModalOpen(false);
+      } catch (error) {
+        console.error('Failed to confirm adoption:', error);
+      }
+    }
   };
 
   if (loading) return <p>Loading pets...</p>;
@@ -102,12 +120,44 @@ const PetList = () => {
                 <p className="text-gray-800">User: {userDetails.userName}</p>
                 <p className="text-gray-800">Email: {userDetails.email}</p>
                 <p className="text-gray-800">Phone Number: {userDetails.phoneNumber}</p>
-
               </>
             )}
+            {/* Confirm Adoption Button */}
+            <button
+              className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+              onClick={handleConfirmAdoptionClick}
+            >
+              Confirm Adoption
+            </button>
           </div>
         )}
       </Modal>
+
+      {/* Modal for confirming adoption */}
+      {selectedPet && (
+        <Modal isOpen={isConfirmModalOpen} onClose={handleConfirmClose} title="Confirm Adoption">
+          <div className="p-4">
+            <h3 className="text-lg font-semibold mb-4">Confirm Adoption</h3>
+            <p className="text-gray-800">Are you sure you want to adopt {selectedPet.name}?</p>
+            <p className="text-gray-800">Age: {selectedPet.age}</p>
+            <p className="text-gray-800">Breed: {selectedPet.breed}</p>
+            <div className="flex justify-end space-x-2 mt-4">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+                onClick={handleConfirmClose}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
+                onClick={handleAdoptionSubmit}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

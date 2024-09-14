@@ -68,3 +68,12 @@ export const OwnerDetails=async(userId)=>{
         console.log('fetching userdetails error',error)
     }
 }
+
+export const ConfirmAdoption=async(petId,ownerId)=>{
+    try{
+        const response=await instance.post('/confirmadoption',{petId,ownerId})
+        return response.data
+    }catch(error){
+        console.log(error)
+    }
+}
