@@ -1,8 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import CommonForm from '../../common/CommonForm';
-import Navbar from './Navbar';
+// import Navbar from './Navbar';
 import { PetAdoption } from '../../../services/user/Adopt';
+import { Error } from '@mui/icons-material';
 export default function AdoptionForm({onAdoptSuccess}) {
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -21,7 +22,7 @@ export default function AdoptionForm({onAdoptSuccess}) {
             const newPet = response.data.pet;
             onAdoptSuccess(newPet)
         }catch(error){
-            console.log('submitting error');
+            console.log('submitting error',Error);
             
         }
     };

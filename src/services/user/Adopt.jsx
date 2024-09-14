@@ -45,3 +45,26 @@ export const AdoptedPetGet=async()=>{
         
     }
 }
+
+
+export const fullPetList=async()=>{
+    try{
+        const response=await instance.get('/pets')
+        console.log('recieved pets',response);
+        
+        return response.data
+    }catch(error){
+        console.log('ptliste user error',error)
+    }
+}
+
+
+export const OwnerDetails=async(userId)=>{
+    try{
+        const response=await instance.get(`/petowner/${userId}`)
+        console.log('response',response)
+        return response.data
+    }catch(error){
+        console.log('fetching userdetails error',error)
+    }
+}
