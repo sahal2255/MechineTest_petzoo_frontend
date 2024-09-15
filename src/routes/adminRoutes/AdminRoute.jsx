@@ -5,6 +5,7 @@ import AdminDashboard from '../../components/layouts/adminLayout/AdminDashboard'
 import AdminProtect from '../../components/Protected/adminProtected/AdminProtect'
 import UserListing from '../../components/layouts/adminLayout/UserListing';
 import PetListing from '../../components/layouts/adminLayout/PetListing';
+import AdminAdoptionRequests from '../../components/layouts/adminLayout/AdoptionRequest';
 export default function AdminRoute() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ export default function AdminRoute() {
           <Route path='/admin/dashboard' element={<AdminDashboard />}>
             <Route path='users' element={<UserListing />} />  
             <Route path='petlist' element={<PetListing />}/>
+            <Route path='adoptrequests' element={<AdminAdoptionRequests />}/>
           </Route>
         </Route>
         </Routes>

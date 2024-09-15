@@ -33,3 +33,22 @@ export const AdminAdoptPet=async(data)=>{
         console.log('service section error',error)
     }
 }
+
+
+export const AdoptRequests=async()=>{
+    try{
+        const response=await instance.get('/admin/adoptionrequests')
+        return response
+    }catch(error){
+        console.log('error',error)
+    }
+}
+
+export const updateAdoptionStatus = async (id, status) => {
+    try {
+      const response = await instance.put(`/admin/adoptionrequests/${id}/status`, { status });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
