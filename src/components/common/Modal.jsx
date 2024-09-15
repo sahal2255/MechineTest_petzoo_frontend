@@ -3,14 +3,12 @@ import React, { useEffect } from 'react';
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null; // Don't render the modal if it's not open
 
-  // Close modal when clicking outside the modal content
   const handleClickOutside = (e) => {
     if (e.target.classList.contains('modal-overlay')) {
       onClose();
     }
   };
 
-  // Close modal with 'Esc' key
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === 'Escape') {
@@ -18,7 +16,9 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       }
     };
     window.addEventListener('keydown', handleEscKey);
-    return () => window.removeEventListener('keydown', handleEscKey);
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
   }, [onClose]);
 
   return (
@@ -26,8 +26,10 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 modal-overlay"
       onClick={handleClickOutside}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 relative max-h-[90vh] overflow-y-auto flex flex-col"> {/* Removed centering */}
-        
+      <div
+        className="bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 relative max-h-[90vh] overflow-y-auto flex flex-col"
+        onClick={(e) => e.stopPropagation()} // Prevent click from closing the modal when clicking inside
+      >
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-red-500 focus:outline-none"
           onClick={onClose}
@@ -54,19 +56,9 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         </div>
 
         {/* Modal Body */}
-        <div className=" flex-1"> {/* Allows the content to expand */}
+        <div className="flex-1 p-4"> {/* Allows the content to expand */}
           {children}
         </div>
-
-        {/* Modal Footer */}
-        {/* <div className="flex justify-end p-4 border-t border-gray-200">
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-            onClick={onClose}
-          >
-            Close
-          </button>
-        </div> */}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fullPetList, OwnerDetails,ConfirmAdoption } from '../../../services/user/Adopt';
 import Navbar from './Navbar';
 import Modal from '../../common/Modal'; // Import Modal component
+import { showErrorToast, showSuccessToast } from '../../common/Toastify';
 
 const PetList = () => {
   const [pets, setPets] = useState([]);
@@ -57,11 +58,15 @@ const PetList = () => {
   const handleAdoptionSubmit = async () => {
     if (selectedPet && userDetails) {
       try {
-        await ConfirmAdoption(selectedPet._id, userDetails._id);
-        console.log('Adoption confirmed for pet:', selectedPet.name);
+       const response= await ConfirmAdoption(selectedPet._id, userDetails._id);
+        // console.log('Adoption confirmed for pet:', selectedPet.name);
+        console.log(response.message)
+        showSuccessToast(response.message); 
         setIsConfirmModalOpen(false);
+        setIsModalOpen(false)
       } catch (error) {
         console.error('Failed to confirm adoption:', error);
+        showErrorToast(err.message)
       }
     }
   };
@@ -101,9 +106,7 @@ const PetList = () => {
         </div>
       </div>
 
-      {/* Modal for showing pet details */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={selectedPet?.name}>
-        {/* Display pet details in the modal */}
         {selectedPet && (
           <div className="p-4">
             <img
@@ -133,7 +136,6 @@ const PetList = () => {
         )}
       </Modal>
 
-      {/* Modal for confirming adoption */}
       {selectedPet && (
         <Modal isOpen={isConfirmModalOpen} onClose={handleConfirmClose} title="Confirm Adoption">
           <div className="p-4">
