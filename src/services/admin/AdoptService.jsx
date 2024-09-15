@@ -38,7 +38,9 @@ export const AdminAdoptPet=async(data)=>{
 export const AdoptRequests=async()=>{
     try{
         const response=await instance.get('/admin/adoptionrequests')
-        return response
+        console.log('adoption response',response);
+        
+        return response.data
     }catch(error){
         console.log('error',error)
     }

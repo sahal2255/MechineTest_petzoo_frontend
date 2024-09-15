@@ -10,7 +10,7 @@ const AdoptionRequests = () => {
     const fetchAdoptionRequests = async () => {
       try {
         const response = await AdoptRequests(); // Fetch data from the server
-        setAdoptionRequests(response.data); // Update state with the fetched data
+        setAdoptionRequests(response); // Update state with the fetched data
       } catch (error) {
         console.error('Error fetching adoption requests:', error);
       }
