@@ -10,3 +10,13 @@ export const ProfileGet = async () => {
         throw error;
     }
 };
+
+
+export const AdoptionRequest=async()=>{
+    try{
+        const response=await instance.get('/adoptionrequests')
+        return response
+    }catch(error){
+        console.log('request getting error',error)
+    }
+}
