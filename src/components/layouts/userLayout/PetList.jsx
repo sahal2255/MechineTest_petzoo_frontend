@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { fullPetList, OwnerDetails,ConfirmAdoption } from '../../../services/user/Adopt';
+import { fullPetList, OwnerDetails, ConfirmAdoption } from '../../../services/user/Adopt';
 import Navbar from './Navbar';
-import Modal from '../../common/Modal'; // Import Modal component
+import Modal from '../../common/Modal'; 
 import { showErrorToast, showSuccessToast } from '../../common/Toastify';
 
 const PetList = () => {
   const [pets, setPets] = useState([]);
+  const [filteredPets, setFilteredPets] = useState([]); // State for filtered pets
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling the pet details modal
-  const [selectedPet, setSelectedPet] = useState(null);  // State to hold the selected pet
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPet, setSelectedPet] = useState(null);  
   const [userDetails, setUserDetails] = useState(null); 
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // State for controlling the confirm adoption modal
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await fullPetList(); // Fetch from service
-        setPets(response.pets || []); // Ensure you're accessing the `pets` key
+        const response = await fullPetList();
+        setPets(response.pets || []);
+        setFilteredPets(response.pets || []); // Set filtered pets initially
       } catch (error) {
         console.error('Failed to fetch pets:', error);
         setError('Failed to load pets');
@@ -29,10 +32,19 @@ const PetList = () => {
     fetchPets();
   }, []);
 
+  useEffect(() => {
+    // Filter pets based on search query
+    const filtered = pets.filter((pet) => 
+      pet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pet.breed.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(pet.age).includes(searchQuery)
+    );
+    setFilteredPets(filtered);
+  }, [searchQuery, pets]); // Run the filter whenever search query or pets data changes
+
   const handleImageClick = async (pet) => {
     setSelectedPet(pet);  
     setIsModalOpen(true); 
-    console.log('selected pet owner id', pet.userId);
     try {
       const ownerData = await OwnerDetails(pet.userId);
       setUserDetails(ownerData);
@@ -48,25 +60,23 @@ const PetList = () => {
   };
 
   const handleConfirmAdoptionClick = () => {
-    setIsConfirmModalOpen(true); // Open confirmation modal
+    setIsConfirmModalOpen(true);
   };
 
   const handleConfirmClose = () => {
-    setIsConfirmModalOpen(false); // Close confirmation modal
+    setIsConfirmModalOpen(false);
   };
 
   const handleAdoptionSubmit = async () => {
     if (selectedPet && userDetails) {
       try {
-       const response= await ConfirmAdoption(selectedPet._id, userDetails._id);
-        // console.log('Adoption confirmed for pet:', selectedPet.name);
-        console.log(response.message)
+        const response = await ConfirmAdoption(selectedPet._id, userDetails._id);
         showSuccessToast(response.message); 
         setIsConfirmModalOpen(false);
-        setIsModalOpen(false)
+        setIsModalOpen(false);
       } catch (error) {
         console.error('Failed to confirm adoption:', error);
-        showErrorToast(err.message)
+        showErrorToast(error.message);
       }
     }
   };
@@ -81,16 +91,25 @@ const PetList = () => {
         <div className="container mx-auto text-center">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">Available Pets for Adoption</h1>
 
+          {/* Search Bar */}
+          <input
+            type="text"
+            placeholder="Search by name, breed, or age"
+            className="mb-6 p-2 border rounded w-1/2"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+          />
+
           {/* Pet Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {pets.length > 0 ? (
-              pets.map((pet, index) => (
+            {filteredPets.length > 0 ? (
+              filteredPets.map((pet, index) => (
                 <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden">
                   <img
                     src={pet.image || 'https://via.placeholder.com/150'}
                     alt={pet.name}
                     className="w-full h-48 object-cover cursor-pointer"
-                    onClick={() => handleImageClick(pet)} // Open modal when clicked
+                    onClick={() => handleImageClick(pet)}
                   />
                   <div className="p-4">
                     <h2 className="text-xl font-semibold text-gray-800">{pet.name}</h2>
@@ -125,7 +144,6 @@ const PetList = () => {
                 <p className="text-gray-800">Phone Number: {userDetails.phoneNumber}</p>
               </>
             )}
-            {/* Confirm Adoption Button */}
             <button
               className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
               onClick={handleConfirmAdoptionClick}
